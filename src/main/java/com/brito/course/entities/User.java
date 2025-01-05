@@ -1,13 +1,17 @@
 package com.brito.course.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+
 @Table(name="tb_user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +25,22 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
+	public Order (Long id, Instant moment, User client) {
+		
+	}
+	
+	public User(Long id, String name, String email, String phone, String password, List<Order> orders) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.password = password;
+		this.orders = orders;
+	}
+
 	public User () {
 			
 	}
@@ -76,7 +96,7 @@ public class User implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(email, id, name, orders, password, phone);
 	}
 
 	@Override
@@ -88,7 +108,21 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(orders, other.orders) && Objects.equals(password, other.password)
+				&& Objects.equals(phone, other.phone);
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	
